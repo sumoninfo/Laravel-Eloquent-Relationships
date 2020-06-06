@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\User;
 use App\Profile;
+use App\Post;
+use App\Category;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Str;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -187,6 +189,78 @@ Route::get('/delete_post', function(){
     // $user->posts()->where('id', 1)->delete();
     $user->posts()->whereUserId(3)->delete();
 
+
+    return 'Success';
+});
+// ----Many To Many Relationship---------
+Route::get('/create_categories', function(){
+//     $post = Post::findOrFail(1);
+//
+//
+//     $post->categories()->create([
+//     	'category' => 'PHP laravel',
+//     	'slug' => Str::slug('PHP laravel', '-'),
+//
+//     ]);
+//     return 'Success';
+
+
+    $user = User::create([
+        'name' => 'New Admin',
+        'email' => 'newadmin@gmail.com',
+        'password' => Hash::make('123123'),
+    ]);
+    $user->posts()->create([
+        'title' => 'New Post Title',
+        'body' => 'New Post Body',
+    ])->categories()->create([
+        'category' => 'New Category',
+        'slug' => Str::slug('New Category', '-'),
+    ]);
+    return 'Success';
+});
+
+
+Route::get('/read_category', function(){
+    $post = Post::find(4);
+    $categories = $post->categories->where('id', 1);
+     foreach ($categories as $category) {
+        echo $category->category.'<br>';
+    }
+
+
+    // $category = Category::find(3);
+    // $posts = $category->posts;
+
+
+    // foreach ($posts as $post) {
+    // 	echo $post->title . '<br>';
+    // }
+
+
+});
+
+
+Route::get('/attach', function(){
+    $post = Post::find(4);
+    $post->categories()->attach([1, 3, 4]);
+
+
+    return 'Success';
+});
+
+
+Route::get('/detach', function(){
+    $post = Post::find(4);
+    $post->categories()->detach([3,1]);
+
+    return 'Success';
+});
+
+
+Route::get('/sync', function(){
+    $post = Post::find(1);
+    $post->categories()->sync([2,4]);
 
     return 'Success';
 });
