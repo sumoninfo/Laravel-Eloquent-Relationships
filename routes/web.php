@@ -108,3 +108,85 @@ Route::get('/delete_profile', function () {
 
     return $user;
 });
+// ----One To Many Relationship---------
+
+
+Route::get('/create_post',  function(){
+    // $user = User::create([
+    // 	'name' => 'Sumon',
+    // 	'email' => 'sumon@gmail.com',
+    // 	'password' => Hash::make('123123'),
+
+
+    // ]);
+
+
+    $user = User::findOrFail(1);
+
+
+    $user->posts()->create([
+        'title' => 'Admin 1st post Title',
+        'body' => 'Admin 1st Post Body sdfsd sdfsd sdfsdf sdfsdf ',
+    ]);
+    return 'Success';
+});
+
+
+Route::get('/red_posts', function(){
+    $user = User::find(4);
+    $posts = $user->posts()->get();
+
+
+    foreach ($posts as $post) {
+        $data[] = [
+            'name' => $post->user->name,
+            'post_id' => $post->id,
+            'title' => $post->title,
+            'body' => $post->body,
+        ];
+    }
+
+
+    // $post = $user->posts()->first();
+
+
+    // 	$data[] = [
+    // 		'name' => $post->user->name,
+    // 		'title' => $post->title,
+    // 		'body' => $post->body,
+    // 	];
+    return $data;
+});
+
+
+Route::get('/update_post', function(){
+    $user = User::findOrFail(4);
+    // $user->posts()->where('id', 1)->update([
+    // 	'title' => 'Update Title 2',
+    // 	'body' => 'Update Body 2',
+
+
+    // ]);
+
+
+    $user->posts()->whereId(2)->update([
+        'title' => 'Update Title',
+        'body' => 'Update Body',
+
+
+    ]);
+    return 'Success';
+});
+
+
+Route::get('/delete_post', function(){
+    $user = User::find(3);
+
+
+    // $user->posts()->whereId(1)->delete();
+    // $user->posts()->where('id', 1)->delete();
+    $user->posts()->whereUserId(3)->delete();
+
+
+    return 'Success';
+});
