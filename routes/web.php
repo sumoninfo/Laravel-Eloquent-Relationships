@@ -342,3 +342,46 @@ Route::get('/comment/delete', function(){
     $comment = $portfolio->comments()->where('id', 2)->delete();
     return 'Success';
 });
+// ----Many to Many Polymorphic Relationship---------
+Route::get('/tag/read', function(){
+//     $post = Post::find(1);
+//     // return $post->tags;
+//     foreach ($post->tags as $tag){
+//     	echo $tag->name ."<br>";
+//     }
+    $portfolio = Portfolio::find(1);
+    // return $post->tags;
+    foreach ($portfolio->tags as $tag){
+        echo $tag->name ."<br>";
+    }
+});
+Route::get('/tag/attach', function(){
+//    $tag = new \App\Tag();
+//    $tag->create([
+//        'name' => 'Tag 3',
+//    ]);
+//    exit();
+//     $post = Post::find(1);
+//     $post->tags()->attach([1,2]);
+    $portfolio = Portfolio::find(1);
+    $portfolio->tags()->attach([2]);
+    return 'Success';
+});
+Route::get('/tag/detach', function(){
+//     $post = Post::find(1);
+//     $post->tags()->detach([2]);
+    $portfolio = Portfolio::find(1);
+    $portfolio->tags()->detach([3]);
+    return 'Success';
+});
+Route::get('tag/sync', function(){
+//     $post = Post::find(1);
+//     $post->tags()->sync([3,2]);
+
+
+    $portfolio = Portfolio::find(1);
+    $portfolio->tags()->sync([3]);
+
+
+    return 'Success';
+});
