@@ -5,6 +5,8 @@ use App\User;
 use App\Profile;
 use App\Post;
 use App\Category;
+use App\Comment;
+use App\Portfolio;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 Route::get('/', function () {
@@ -274,4 +276,69 @@ Route::get('/country/create', function(){
 
 
     return $country->posts;
+});
+// ----Polymorphic Relationship---------
+Route::get('/comment/create', function(){
+//     $post = Post::find(1);
+//     $post->comments()->create([
+//     	'user_id' => 1,
+//     	'content' => '1st Comments 1st post'
+//     ]);
+//    $user = User::find(2);
+//    $user->portfolios()->create([
+//        'title' => '1st Profile title',
+//        'body' => '1st Profile Body'
+//    ]);
+    $portfolio = Portfolio::find(1);
+    $portfolio->comments()->create([
+        'user_id' => 1,
+        'content' => '1st Comments 1st Profile'
+    ]);
+    return 'Success';
+});
+Route::get('/comment/read', function(){
+//     $post = Post::findOrFail(1);
+//     $comments = $post->comments;
+//
+//
+//     foreach ($comments as $comment) {
+//     	echo $comment->user->name . '-' . $comment->content . '(' . $comment->commentable->title . ') <br>';
+//     }
+//
+//     exit();
+
+    $portfolio = Portfolio::findOrFail(1);
+    $comments = $portfolio->comments;
+
+
+    foreach ($comments as $comment) {
+        echo $comment->user->name . '-' . $comment->content . '(' . $comment->commentable->title . ') <br>';
+    }
+//    return $comments;
+});
+Route::get('/comment/update', function(){
+//     $post = Post::find(1);
+//     $comment = $post->comments()->whereId(1)->first();
+//     $comment->update([
+//     	'content' => 'Update Comments Data',
+//     ]);
+//    dd($comment);
+
+
+    $portfolio = Portfolio::find(1);
+    $comment = $portfolio->comments()->where('id', 2)->first();
+    $comment->update([
+        'content' => 'Update Portfolio Comments Data',
+    ]);
+    return 'Success';
+});
+Route::get('/comment/delete', function(){
+//     $post = Post::find(1);
+//     $comment = $post->comments()->where('id', 1)->delete();
+//
+//     exit();
+
+    $portfolio = Portfolio::find(1);
+    $comment = $portfolio->comments()->where('id', 2)->delete();
+    return 'Success';
 });
