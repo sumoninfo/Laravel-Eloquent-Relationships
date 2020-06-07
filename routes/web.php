@@ -264,3 +264,14 @@ Route::get('/sync', function(){
 
     return 'Success';
 });
+
+// ----Has Many Through Relationship---------
+Route::get('/country/create', function(){
+//    $user = \App\Country::create([
+//        'name' => 'USA',
+//    ]);
+    $country = \App\Country::find(1);
+
+
+    return $country->posts;
+});
